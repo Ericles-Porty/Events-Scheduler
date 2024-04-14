@@ -2,7 +2,9 @@ Fiz esse projeto para relembrar php e docker. A ideia é criar uma api simples p
 
 Para subir os containers, basta rodar o comando `docker-compose up --build` na raiz do projeto.
 
-Para criar a tabela de posts, basta rodar o seguinte comando no terminal do container do banco de dados:
+Para usar a cli no container do banco de dados, basta rodar o comando `psql -U postgres -d posts` no terminal do container do banco de dados.
+
+Para criar a tabela de posts, basta rodar o seguinte comando na cli do banco de dados:
 ```sql
 CREATE TABLE IF NOT EXISTS posts (
     id SERIAL PRIMARY KEY,
