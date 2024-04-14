@@ -19,13 +19,10 @@ class Database
         $dsn = "pgsql:host={$this->host};dbname={$this->dbName}";
 
         try {
-            $this->connection = new PDO($dsn, $this->username, $this->password);
-            // Configuração adicional, se necessário
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // Create table posts if not exists
-           
-            
+            $this->connection = new PDO($dsn, $this->username, $this->password);
+
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo 'Erro de conexão: ' . $e->getMessage();
         }

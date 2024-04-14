@@ -12,6 +12,7 @@ class Routes
 {
     public static function loadRoutes(App $app)
     {
+        $app->get('[/]', [HomeController::class, 'index']);
         $app->group('/api', function (RouteCollectorProxy $group) {
             $group->get('[/]', [HomeController::class, 'index']);
             $group->group('/posts', function (RouteCollectorProxy $group) {

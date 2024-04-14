@@ -1,5 +1,5 @@
 {
-    "name": "eris/phpdocker",
+    "name": "eris/postsapi",
     "autoload": {
         "psr-4": {
             "App\\": "App/"
@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "Ericles",
-            "email": "ericlesdsantos@gmail.com"
+            "email": "sinucaprogr@gmail.com"
         }
     ],
     "require": {
