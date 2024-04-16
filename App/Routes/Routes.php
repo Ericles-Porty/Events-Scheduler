@@ -3,7 +3,6 @@
 namespace App\Routes;
 
 use Slim\App;
-
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
 use Slim\Routing\RouteCollectorProxy;

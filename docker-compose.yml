@@ -14,16 +14,35 @@ services:
     build:
       context: .
     volumes:
-      - ./App:/var/www/html/App
+      - ./app:/var/www/html/app
       - ./public:/var/www/html/public
+      - ./messaging:/var/www/html/messaging
+      - .env:/var/www/html/.env
     depends_on:
       - db
+      - rabbitmq
 
   db:
     image: postgres:latest
     ports:
       - "5432:5432"
+    restart: always
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: posts
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Web Panel
+    # environment:
+    #   - RABBITMQ_USER=guest
+    #   - RABBITMQ_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_data:
+  db_data:
