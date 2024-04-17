@@ -1,4 +1,4 @@
-Fiz esse projeto para praticar PHP, Docker, PostgreSQL, Slim Framework, RabbitMQ, PHPUnit e Elasticsearch. 
+Fiz esse projeto para praticar PHP, Nginx, Docker, PostgreSQL, Slim Framework, RabbitMQ, PHPUnit e Elasticsearch. 
 A ideia é criar uma api simples para gerenciar posts utilizando todos esses recursos.
 
 Para subir os containers, basta rodar o comando `docker-compose up --build` na raiz do projeto.
@@ -19,8 +19,10 @@ CREATE TABLE IF NOT EXISTS posts (
     content TEXT NOT NULL
 );
 ```
-O Nginx estará disponível em `http://localhost:8000` 
+O Nginx estará disponível em `http://localhost:8080` 
+
 O RabbitMQ estará disponível em  `http://localhost:15672`. user = guest, password = guest
+
 O Kibana estará disponível em `http://localhost:5601`. user = elastic, password = changeme
 
 Para testar os endpoints, você pode usar o arquivo api.http que está na raiz do projeto com a extensão REST Client do VSCode.
