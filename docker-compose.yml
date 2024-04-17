@@ -34,6 +34,7 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/postgresql/data
+      
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:

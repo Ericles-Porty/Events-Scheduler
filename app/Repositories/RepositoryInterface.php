@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface IRepository
+interface RepositoryInterface
 {
     public function all(): array;
     public function find($id): object | null;

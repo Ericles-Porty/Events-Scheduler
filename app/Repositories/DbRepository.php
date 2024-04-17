@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Databases\PostgresDatabase;
 
-abstract class DbRepository implements IRepository
+abstract class DbRepository implements RepositoryInterface
 {
     protected $connection = null;
 

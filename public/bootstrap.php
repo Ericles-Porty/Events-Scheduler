@@ -1,8 +1,6 @@
 <?php
 
-use App\Handlers\AppErrorHandler;
 use App\Routes\Routes;
-use Elastic\Elasticsearch\Response\Elasticsearch;
 use Logger\Elasticsearch\ElasticsearchLogger;
 use Slim\Factory\AppFactory;
 
@@ -17,15 +15,13 @@ foreach ($lines as $line) {
         putenv(trim($line));
     }
 }
-// $container = new DI\Container();
 
-// $container->set('logger', function () {
-//     return new ElasticsearchLogger();
-// });
 
 $app = AppFactory::create();
 
-// $app->add(new ErrorHandlerMiddleware($container->get('logger')));
+$app->addRoutingMiddleware();
+$app->addErrorMiddleware(true, true, true, new ElasticsearchLogger);
 
 Routes::loadRoutes($app);
+
 $app->run();

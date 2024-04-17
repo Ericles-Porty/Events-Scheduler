@@ -4,13 +4,12 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Repositories\PostRepository;
-use App\Services\LoggerService;
 
-class PostService
+class PostService implements PostServiceInterface
 {
     private PostRepository $postRepository;
     private MessageService $messageService;
-    private LoggerService $loggerService;
+    private LoggerServiceInterface $loggerService;
 
     public function __construct()
     {
@@ -23,25 +22,6 @@ class PostService
     {
         try {
             $posts = $this->postRepository->all();
-        } catch (\Throwable $th) {
-
-            $this->loggerService->send(
-                'post_all',
-                'error',
-                'Erro ao buscar posts no banco de dados',
-                [
-                    'error' => $th->getMessage()
-                ]
-            );
-
-            throw new \Exception('Erro ao buscar posts no banco de dados');
-        }
-
-        try {
-            $message = json_encode($posts);
-            $this->messageService->sendMessageToQueue('posts_listed', $message);
-
-            $this->loggerService->send('post_all', 'info', 'Posts listados', $posts);
 
             return $posts;
         } catch (\Throwable $th) {
@@ -62,36 +42,6 @@ class PostService
     {
         try {
             $post = $this->postRepository->find($id);
-        } catch (\Throwable $th) {
-
-            $this->loggerService->send(
-                'post_get',
-                'error',
-                'Erro ao buscar post no banco de dados',
-                [
-                    'error' => $th->getMessage()
-                ]
-            );
-
-            throw new \Exception('Erro ao buscar post no banco de dados');
-        }
-
-        try {
-            if (!$post) {
-                $message = json_encode(['id' => $id]);
-
-                $this->messageService->sendMessageToQueue('post_not_found', $message);
-
-                $this->loggerService->send('post_get', 'info', 'Post não encontrado', ['id' => $id]);
-
-                return null;
-            }
-
-            $message = json_encode($post->toArray());
-
-            $this->messageService->sendMessageToQueue('post_listed', $message);
-
-            $this->loggerService->send('post_get', 'info', 'Post encontrado', $post->toArray());
 
             return $post;
         } catch (\Throwable $th) {
@@ -128,7 +78,7 @@ class PostService
 
         try {
             $message = json_encode($post->toArray());
-            $this->messageService->sendMessageToQueue('post_new', $message);
+            $this->messageService->sendMessageToQueue('post_created', $message);
 
             $this->loggerService->send('post_new', 'info', 'Post criado', $post->toArray());
 
@@ -168,9 +118,6 @@ class PostService
 
         try {
             if (!$post) {
-                $message = json_encode(['id' => $id]);
-
-                $this->messageService->sendMessageToQueue('post_not_found', $message);
 
                 $this->loggerService->send(
                     'post_updt',
@@ -219,7 +166,7 @@ class PostService
             $this->loggerService->send(
                 'post_del',
                 'error',
-                'Erro ao deletar post no banco de dados',
+                'Erro ao encontrar post para deletar no banco de dados',
                 [
                     'error' => $th->getMessage()
                 ]
@@ -227,11 +174,9 @@ class PostService
 
             throw new \Exception('Erro ao deletar post no banco de dados');
         }
+
         try {
             if (!$post) {
-                $message = json_encode(['id' => $id]);
-
-                $this->messageService->sendMessageToQueue('post_not_found', $message);
 
                 $this->loggerService->send(
                     'post_del',
@@ -244,8 +189,22 @@ class PostService
             }
 
             $this->postRepository->delete($id);
+        } catch (\Throwable $th) {
 
-            $message = json_encode($post->toArray());
+            $this->loggerService->send(
+                'post_del',
+                'error',
+                'Erro ao deletar post no banco de dados',
+                [
+                    'error' => $th->getMessage()
+                ]
+            );
+
+            throw new \Exception('Erro ao deletar post no banco de dados');
+        }
+        
+        try {
+            $message = $post->toJson();
 
             $this->messageService->sendMessageToQueue('post_deleted', $message);
 
@@ -258,6 +217,16 @@ class PostService
 
             return $post;
         } catch (\Throwable $th) {
+
+            $this->loggerService->send(
+                'post_del',
+                'error',
+                'Erro ao enviar mensagem para a fila',
+                [
+                    'error' => $th->getMessage()
+                ]
+            );
+
             throw new \Exception('Erro ao deletar post');
         }
     }

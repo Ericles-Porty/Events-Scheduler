@@ -11,8 +11,8 @@ class ElasticsearchLogger implements LoggerInterface
 
     public function __construct()
     {
+        $host = 'elasticsearch'; // Container name in docker-compose.yml
         $port = getenv('ELASTICSEARCH_HTTP_PORT') ?: 9200;
-        $host = 'elasticsearch';
         $this->client = ClientBuilder::create()
             ->setHosts(["$host:$port"])
             ->build();

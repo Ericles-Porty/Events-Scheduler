@@ -21,9 +21,9 @@ Content-Type: application/json
 
 {
     "title": "Post 1 updated",
-    "content": "Content 1"
+    "content": "Content 1 updated"
 }
 
 ###
 
-DELETE http://localhost:8080/api/posts/15
+DELETE http://localhost:8080/api/posts/13
