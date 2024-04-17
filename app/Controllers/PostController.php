@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Post;
 
 use App\Services\PostService;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -84,12 +85,12 @@ class PostController
             ]));
 
             return $response->withStatus(201);
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
             $response
                 ->getBody()
                 ->write(json_encode([
                     'message' => 'Erro ao criar post',
-                    'error' => $th->getMessage,
+                    'error' => $th->getMessage(),
                 ]));
 
             return $response->withStatus(500);
