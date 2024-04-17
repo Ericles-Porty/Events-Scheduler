@@ -25,7 +25,5 @@ Endpoints:
 - DELETE /api/posts/{id}
 
 Observações: 
-- Eu ainda não fiz a sanitização dos dados de entrada, então talvez seja possível fazer sql injection. 
 - Os testes unitários ainda não estão prontos.
 - A documentação da api ainda não está pronta. (Swagger)
-- As variáveis de ambiente ainda não estão configuradas. Todas as configurações estão hardcoded.
