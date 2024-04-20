@@ -7,14 +7,13 @@ use Logger\Elasticsearch\ElasticsearchLogger;
 class LoggerService implements LoggerServiceInterface
 {
 
-    private ElasticsearchLogger $loggerClient;
-    public function __construct()
-    {
-        $this->loggerClient = new ElasticsearchLogger();
+    public function __construct(
+        private ElasticsearchLogger $logger
+    ) {
     }
 
     public function send(string $index, string $level, string $message, array $data = []): void
     {
-        $this->loggerClient->send($index, $level, $message, $data);
+        $this->logger->send($index, $level, $message, $data);
     }
 }

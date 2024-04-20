@@ -26,7 +26,9 @@ $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
 
-$app->addErrorMiddleware(true, true, true, new ElasticsearchLogger);
+$logger = $container->get(ElasticsearchLogger::class);
+
+$app->addErrorMiddleware(true, true, true, $logger);
 
 Routes::loadRoutes($app);
 

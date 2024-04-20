@@ -3,18 +3,17 @@
 namespace App\Services;
 
 use App\Models\Post;
-use App\Repositories\PostRepository;
+use App\Repositories\PostRepositoryInterface;
 
 class PostService implements PostServiceInterface
 {
     private MessageService $messageService;
-    private LoggerServiceInterface $loggerService;
 
     public function __construct(
-        private PostRepository $postRepository,
+        private PostRepositoryInterface $postRepository,
+        private LoggerServiceInterface $loggerService
     ) {
         $this->messageService = new MessageService();
-        $this->loggerService = new LoggerService();
     }
 
     public function getPosts(): array
