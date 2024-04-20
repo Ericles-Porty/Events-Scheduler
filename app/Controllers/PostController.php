@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Post;
 
 use App\Services\PostService;
+use App\Services\PostServiceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,17 +14,15 @@ class PostController
 {
     // protected $service;
 
-    public function __construct()
-    {
-        // Preciso descobrir como injetar a dependência do PostService
-        // $this->service = new PostService;
+    public function __construct(
+        private PostServiceInterface $service
+    ) {
     }
 
     public function index(Request $request, Response $response, $args)
     {
-        $service = new PostService;
 
-        $posts = $service->getPosts();
+        $posts = $this->service->getPosts();
 
         $response->getBody()->write(json_encode($posts));
 
@@ -32,13 +31,12 @@ class PostController
 
     public function show(Request $request, Response $response, $args)
     {
-        $service = new PostService;
 
         $response->withHeader('Content-Type', 'application/json;charset=utf-8');
         $postId = $args['id'];
 
         try {
-            $post = $service->getPostById($postId);
+            $post = $this->service->getPostById($postId);
 
             if (!$post) {
                 $response->getBody()->write(json_encode(['message' => 'Post não encontrado']));
@@ -70,13 +68,12 @@ class PostController
 
     public function store(Request $request, Response $response, $args)
     {
-        $service = new PostService;
         $data = json_decode($request->getBody()->getContents(), true);
 
         $post = Post::fromArray($data);
 
         try {
-            $post = $service->createPost($post);
+            $post = $this->service->createPost($post);
 
             $response->getBody()->write(json_encode([
                 'id' => $post->id,
@@ -99,13 +96,12 @@ class PostController
 
     public function update(Request $request, Response $response, $args)
     {
-        $service = new PostService;
 
         $postId = $args['id'];
 
         $data = json_decode($request->getBody()->getContents(), true);
 
-        $post = $service->getPostById($postId);
+        $post = $this->service->getPostById($postId);
 
         if (!$post) {
             $response->getBody()->write(json_encode(['message' => 'Post não encontrado']));
@@ -116,7 +112,7 @@ class PostController
         $post->title = $data['title'];
         $post->content = $data['content'];
 
-        $updatedPost = $service->updatePost($postId, $post);
+        $updatedPost = $this->service->updatePost($postId, $post);
 
         $response->getBody()->write(json_encode([
             'id' => $updatedPost->id,
@@ -129,12 +125,11 @@ class PostController
 
     public function delete(Request $request, Response $response, $args)
     {
-        $service = new PostService;
 
         $postId = $args['id'];
 
         try {
-            $post = $service->deletePost($postId);
+            $post = $this->service->deletePost($postId);
 
             if (!$post) {
                 $response->getBody()->write(json_encode(['message' => 'Post não encontrado']));

@@ -2,12 +2,22 @@
 
 namespace App\Repositories;
 
+use App\Databases\PostgresDatabase;
 use App\Models\Post;
+use App\Repositories\RepositoryInterface;
 
 use PDO;
 
-class PostRepository extends DbRepository
+class PostRepository implements RepositoryInterface
 {
+    private PDO $connection;
+
+    public function __construct(
+        private PostgresDatabase $database
+    ) {
+        $this->connection = $database->getConnection();
+    }
+
     public function all(): array
     {
         $stmt = $this->connection->query('SELECT * FROM posts');

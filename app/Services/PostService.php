@@ -7,13 +7,12 @@ use App\Repositories\PostRepository;
 
 class PostService implements PostServiceInterface
 {
-    private PostRepository $postRepository;
     private MessageService $messageService;
     private LoggerServiceInterface $loggerService;
 
-    public function __construct()
-    {
-        $this->postRepository = new PostRepository();
+    public function __construct(
+        private PostRepository $postRepository,
+    ) {
         $this->messageService = new MessageService();
         $this->loggerService = new LoggerService();
     }
@@ -202,7 +201,7 @@ class PostService implements PostServiceInterface
 
             throw new \Exception('Erro ao deletar post no banco de dados');
         }
-        
+
         try {
             $message = $post->toJson();
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cdfa5b668252c7d98b9ca2ef1606cee",
+    "content-hash": "62eb93648ed60539a645fe4f902a99c9",
     "packages": [
         {
             "name": "elastic/transport",
