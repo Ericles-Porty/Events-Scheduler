@@ -26,13 +26,13 @@ class PostService implements PostServiceInterface
             $this->loggerService->send(
                 'post_all',
                 'error',
-                'Erro ao enviar mensagem para a fila',
+                'Erro ao buscar posts no banco de dados',
                 [
                     'error' => $th->getMessage()
                 ]
             );
 
-            throw new \Exception('Erro ao enviar mensagem para a fila');
+            throw new \Exception('Erro ao buscar posts no banco de dados');
         }
     }
 
@@ -46,13 +46,13 @@ class PostService implements PostServiceInterface
             $this->loggerService->send(
                 'post_get',
                 'error',
-                'Erro ao enviar mensagem para a fila',
+                'Erro ao buscar post no banco de dados',
                 [
                     'error' => $th->getMessage()
                 ]
             );
 
-            throw new \Exception('Erro ao enviar mensagem para a fila');
+            throw new \Exception('Erro ao buscar post no banco de dados');
         }
     }
 
@@ -86,50 +86,37 @@ class PostService implements PostServiceInterface
             $this->loggerService->send(
                 'post_new',
                 'error',
-                'Erro ao enviar mensagem para a fila',
+                'Erro ao enviar novo post para a fila',
                 [
                     'error' => $th->getMessage()
                 ]
             );
 
-            throw new \Exception('Erro ao enviar mensagem para a fila');
+            throw new \Exception('Erro ao enviar novo post para a fila');
         }
     }
 
-    public function updatePost($id, Post $updatedPost): Post
+    public function updatePost($id, Post $post): Post
     {
         try {
-            $post = $this->postRepository->find($id);
+
+            $updatedPost = $this->postRepository->update($id, $post);
         } catch (\Throwable $th) {
 
             $this->loggerService->send(
                 'post_updt',
                 'error',
-                'Erro ao buscar post no banco de dados na atualização',
+                'Erro ao atualizar post no banco de dados',
                 [
                     'error' => $th->getMessage()
                 ]
             );
 
-            throw new \Exception('Erro ao buscar post no banco de dados');
+            throw new \Exception('Erro ao atualizar post no banco de dados');
         }
 
         try {
-            if (!$post) {
-
-                $this->loggerService->send(
-                    'post_updt',
-                    'info',
-                    'Post não encontrado',
-                    ['id' => $id]
-                );
-
-                return null;
-            }
-
-            $updatedPost = $this->postRepository->update($id, $updatedPost);
-
-            $message = json_encode($updatedPost->toArray());
+            $message = json_encode($updatedPost);
 
             $this->messageService->sendMessageToQueue('post_updated', $message);
 
@@ -140,52 +127,25 @@ class PostService implements PostServiceInterface
                 $updatedPost->toArray()
             );
 
-            return $post;
+            return $updatedPost;
         } catch (\Throwable $th) {
 
             $this->loggerService->send(
                 'post_updt',
                 'error',
-                'Erro ao enviar mensagem para a fila',
+                'Erro ao enviar mensagem com post atualizado para a fila',
                 [
                     'error' => $th->getMessage()
                 ]
             );
 
-            throw new \Exception('Erro ao enviar mensagem para a fila');
+            throw new \Exception('Erro ao enviar mensagem com post atualizado para a fila');
         }
     }
 
-    public function deletePost($id): Post | null
+    public function deletePost($id): void
     {
         try {
-            $post = $this->postRepository->find($id);
-        } catch (\Throwable $th) {
-            $this->loggerService->send(
-                'post_del',
-                'error',
-                'Erro ao encontrar post para deletar no banco de dados',
-                [
-                    'error' => $th->getMessage()
-                ]
-            );
-
-            throw new \Exception('Erro ao deletar post no banco de dados');
-        }
-
-        try {
-            if (!$post) {
-
-                $this->loggerService->send(
-                    'post_del',
-                    'info',
-                    'Post não encontrado',
-                    ['id' => $id]
-                );
-
-                return null;
-            }
-
             $this->postRepository->delete($id);
         } catch (\Throwable $th) {
 
@@ -199,33 +159,6 @@ class PostService implements PostServiceInterface
             );
 
             throw new \Exception('Erro ao deletar post no banco de dados');
-        }
-
-        try {
-            $message = $post->toJson();
-
-            $this->messageService->sendMessageToQueue('post_deleted', $message);
-
-            $this->loggerService->send(
-                'post_del',
-                'info',
-                'Post deletado',
-                $post->toArray()
-            );
-
-            return $post;
-        } catch (\Throwable $th) {
-
-            $this->loggerService->send(
-                'post_del',
-                'error',
-                'Erro ao enviar mensagem para a fila',
-                [
-                    'error' => $th->getMessage()
-                ]
-            );
-
-            throw new \Exception('Erro ao deletar post');
         }
     }
 }

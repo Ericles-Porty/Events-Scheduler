@@ -13,7 +13,7 @@ interface PostServiceInterface
 
     public function createPost(Post $post): Post;
 
-    public function updatePost($id, Post $updatedPost): Post;
+    public function updatePost($id, Post $post): Post;
 
-    public function deletePost($id): Post | null;
+    public function deletePost($id): void;
 }

@@ -5,6 +5,7 @@ namespace App\Routes;
 use Slim\App;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
+use App\Middlewares\GetPostMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
 class Routes
@@ -16,10 +17,12 @@ class Routes
             $group->get('[/]', [HomeController::class, 'index']);
             $group->group('/posts', function (RouteCollectorProxy $group) {
                 $group->get('[/]', [PostController::class, 'index']);
-                $group->get('/{id}', [PostController::class, 'show']);
                 $group->post('[/]', [PostController::class, 'store']);
-                $group->put('/{id}', [PostController::class, 'update']);
-                $group->delete('/{id}', [PostController::class, 'delete']);
+                $group->group('/{id:[0-9]+}', function (RouteCollectorProxy $group) {
+                    $group->get('[/]', [PostController::class, 'show']);
+                    $group->put('[/]', [PostController::class, 'update']);
+                    $group->delete('[/]', [PostController::class, 'delete']);
+                })->add(GetPostMiddleware::class);
             });
         });
     }
