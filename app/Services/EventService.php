@@ -28,11 +28,22 @@ class EventService implements EventServiceInterface
         return $this->repository->find($id);
     }
 
+    public function getEventBySlug(string $slug): ?Event
+    {
+        return $this->repository->findBySlug($slug);
+    }
+
     public function createEvent(Event $event): Event
     {
         $slugGenerator = require ROOT_PATH . '/app/Utils/generateSlug.php';
 
         $event->slug = $slugGenerator($event->title);
+
+        $existingEvent = $this->repository->findBySlug($event->slug);
+
+        if ($existingEvent) {
+            throw new \Exception('Não é possivel criar um evento com esse título.');
+        }
 
         try {
             $event = $this->repository->create($event);

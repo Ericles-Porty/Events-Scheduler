@@ -12,5 +12,7 @@ interface EventServiceInterface
 
     public function getEvent(string $id): ?Event;
 
+    public function getEventBySlug(string $slug): ?Event;
+
     public function createEvent(Event $event): Event;
 }

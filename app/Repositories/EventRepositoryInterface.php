@@ -11,6 +11,8 @@ interface EventRepositoryInterface
     public function all(): array;
 
     public function find(string $id): ?Event;
+    
+    public function findBySlug(string $slug): ?Event;
 
     public function create(Event $event): Event;
 }

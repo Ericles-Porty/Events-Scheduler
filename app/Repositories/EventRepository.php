@@ -50,6 +50,29 @@ class EventRepository implements EventRepositoryInterface
         return $event;
     }
 
+    public function findBySlug(string $slug): ?Event
+    {
+
+        $stmt = $this->connection->prepare('SELECT * FROM events WHERE slug = :slug');
+        $stmt->bindParam(':slug', $slug);
+
+        $success = $stmt->execute();
+
+        if (!$success) {
+            throw new \Exception('Erro ao buscar evento');
+        }
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            return null;
+        }
+
+        $event = Event::fromArray($row);
+
+        return $event;
+    }
+
     public function create(Event $event): Event
     {
 

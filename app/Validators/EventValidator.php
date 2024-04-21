@@ -20,7 +20,10 @@ class EventValidator
         $validation = $this->validator->make($data, [
             'title' => 'required|min:3|max:255',
             'details' => 'nullable|min:3',
-            'maximum_attendees' => 'nullable|integer'
+            'maximum_attendees' => [
+                'nullable', 'integer', 'min:1',
+                fn ($value) => is_int($value),
+            ],
         ]);
 
         $validation->validate();

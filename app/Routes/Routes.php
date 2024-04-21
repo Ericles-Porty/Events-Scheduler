@@ -31,6 +31,7 @@ class Routes
                 $group->get('[/]', [EventController::class, 'index']);
                 $group->get('/{id}', [EventController::class, 'show']);
                 $group->post('[/]', [EventController::class, 'store']);
+                $group->get('/title/{slug}', [EventController::class, 'showBySlug']);
             });
         });
     }

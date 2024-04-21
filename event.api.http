@@ -6,13 +6,17 @@ GET http://localhost:8080/api/events/6624abe6d2274
 
 ###
 
+GET http://localhost:8080/api/events/title/new-eris
+
+###
+
 POST http://localhost:8080/api/events
 Content-Type: application/json
 
 {
-    "title": "New Evaenaaatsaa",
+    "title": "aNew eriassa",
     "details": "New Eventsaaa",
-    "maximum_attendees": 10
+    "maximum_attendees": 100
 }
 
 ###

@@ -78,4 +78,19 @@ class EventController
             return $response->withStatus(500);
         }
     }
+
+    public function showBySlug(Request $request, Response $response, array $args): Response
+    {
+        $slug = $args['slug'];
+
+        $event = $this->service->getEventBySlug($slug);
+
+        if (!$event) {
+            return $response->withStatus(404);
+        }
+
+        $response->getBody()->write($event->toJson());
+
+        return $response->withStatus(200);
+    }
 }
