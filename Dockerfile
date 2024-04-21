@@ -4,11 +4,13 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # Instalação das dependências
 RUN apt-get update && apt-get install -y \
+    libicu-dev \
     libpq-dev \
     zip \
     unzip \
     git \
-    && docker-php-ext-install pdo pdo_pgsql sockets
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install pdo pdo_pgsql sockets intl
 
 # Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

@@ -18,7 +18,8 @@
         "slim/psr7": "^1.6",
         "php-di/php-di": "^7.0",
         "php-amqplib/php-amqplib": "^3.5",
-        "elasticsearch/elasticsearch": "^8.13"
+        "elasticsearch/elasticsearch": "^8.13",
+        "rakit/validation": "^1.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

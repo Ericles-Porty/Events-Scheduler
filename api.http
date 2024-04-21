@@ -10,8 +10,8 @@ POST http://localhost:8080/api/posts
 Content-Type: application/json
 
 {
-    "title": "Post 1",
-    "content": "Content 1"
+    "title": "Post",
+    "content": "Content"
 }
 
 ###
@@ -20,8 +20,9 @@ PUT http://localhost:8080/api/posts/5
 Content-Type: application/json
 
 {
-    "title": "Post 1 updated",
-    "content": "Content 1 updated"
+    "id":"5",
+    "title": "Post updated",
+    "content": "Content updated"
 }
 
 ###

@@ -2,6 +2,7 @@
 
 namespace App\Routes;
 
+use App\Controllers\EventController;
 use Slim\App;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
@@ -13,6 +14,7 @@ class Routes
     public static function loadRoutes(App $app)
     {
         $app->get('[/]', [HomeController::class, 'index']);
+
         $app->group('/api', function (RouteCollectorProxy $group) {
             $group->get('[/]', [HomeController::class, 'index']);
             $group->group('/posts', function (RouteCollectorProxy $group) {
@@ -23,6 +25,12 @@ class Routes
                     $group->put('[/]', [PostController::class, 'update']);
                     $group->delete('[/]', [PostController::class, 'delete']);
                 })->add(GetPostMiddleware::class);
+            });
+
+            $group->group('/events', function (RouteCollectorProxy $group) {
+                $group->get('[/]', [EventController::class, 'index']);
+                $group->get('/{id}', [EventController::class, 'show']);
+                $group->post('[/]', [EventController::class, 'store']);
             });
         });
     }
