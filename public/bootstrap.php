@@ -1,6 +1,8 @@
 <?php
 
 use App\Middlewares\AddJsonResponseHeader;
+use App\Middlewares\ErrorsLogMiddleware;
+use App\Middlewares\LogErrorsMiddleware;
 use DI\ContainerBuilder;
 use App\Routes\Routes;
 use Logger\Elasticsearch\ElasticsearchLogger;
@@ -38,6 +40,10 @@ $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
 
 $app->add(new AddJsonResponseHeader);
+
+$errorLoggerMidleware = $container->get(LogErrorsMiddleware::class);
+
+$app->add($errorLoggerMidleware);
 
 Routes::loadRoutes($app);
 

@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Models\Event;
 use App\Repositories\EventRepositoryInterface;
+use Logger\Elasticsearch\ElasticsearchLogger;
 
 class EventService implements EventServiceInterface
 {
     public function __construct(
-        private EventRepositoryInterface $repository
+        private EventRepositoryInterface $repository,
+        private ElasticsearchLogger $logger
     ) {
     }
 
@@ -36,18 +38,21 @@ class EventService implements EventServiceInterface
     public function createEvent(Event $event): Event
     {
         $slugGenerator = require ROOT_PATH . '/app/Utils/generateSlug.php';
-
+        
         $event->slug = $slugGenerator($event->title);
 
-        $existingEvent = $this->repository->findBySlug($event->slug);
 
+        
+        $existingEvent = $this->repository->findBySlug($event->slug);
+        
         if ($existingEvent) {
             throw new \Exception('Não é possivel criar um evento com esse título.');
         }
-
+        
         try {
             $event = $this->repository->create($event);
-
+            
+            $this->logger->info('Creating event', ['event' => $event->toJson()]);
             return $event;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

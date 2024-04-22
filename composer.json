@@ -1,5 +1,5 @@
 {
-    "name": "eris/postsapi",
+    "name": "eris/events-scheduler",
     "autoload": {
         "psr-4": {
             "App\\": "app/",

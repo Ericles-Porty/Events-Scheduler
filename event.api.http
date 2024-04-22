@@ -14,9 +14,9 @@ POST http://localhost:8080/api/events
 Content-Type: application/json
 
 {
-    "title": "aNew eriassa",
-    "details": "New Eventsaaa",
-    "maximum_attendees": 100
+    "title": "New erisdccsd",
+    "details": "New Events",
+    "maximum_attendees": 1
 }
 
 ###
