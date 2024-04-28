@@ -9,15 +9,8 @@ Para usar a cli no container do banco de dados, basta rodar o comando `psql -U p
 
 Para criar o banco de dados e a tabela, basta rodar os seguintes comandos no terminal do container do banco de dados:
 ```sql
-CREATE DATABASE posts;
+CREATE DATABASE events;
 
-\c posts;
-
-CREATE TABLE IF NOT EXISTS posts (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL
-);
 ```
 O Nginx estará disponível em `http://localhost:8080` 
 
