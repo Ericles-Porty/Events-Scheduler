@@ -1,6 +1,8 @@
 Fiz esse projeto para praticar PHP, Nginx, Docker, PostgreSQL, Slim Framework, RabbitMQ, PHPUnit e Elasticsearch. 
 A ideia é criar uma api simples para gerenciar posts utilizando todos esses recursos.
 
+O Readme está incompleto!
+
 Para subir os containers, basta rodar o comando `docker-compose up --build` na raiz do projeto.
 
 Para entrar no container do postgres, basta rodar o comando `docker exec -it posts-api-ecosystem-db-1 bash` no terminal.
